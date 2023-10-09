@@ -1,6 +1,4 @@
 /*
- * This file is part of Family Contact Organizer.
- *
  * Family Contact Organizer is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -54,10 +52,11 @@ public class Family_Contact_Organizer{
         } while (choice != 5);
     }
 
+    // Display the menu options
     static void menu(){
-        System.out.print("-------------------------------------------\n");
-        System.out.println("\tFAMILY CONTACT ORGANIZER");
-        System.out.print("-------------------------------------------\n");
+        System.out.print("----------------------------------------------------------\n");
+        System.out.println("           \tFAMILY CONTACT ORGANIZER");
+        System.out.print("----------------------------------------------------------\n");
         System.out.println("[1]. Add Family Contact");
         System.out.println("[2]. Print All Contacts");
         System.out.println("[3]. Delete Family Contact");
@@ -66,45 +65,44 @@ public class Family_Contact_Organizer{
         System.out.print("Enter your choice: ");
     }
 
+    // Add contact information to the file
     private static void addContactInformation(){
         Scanner scanner = new Scanner(System.in);
         try{
-            System.out.print("\nEnter full name: ");
+            // Gather contact information
+            System.out.print("\nEnter full name       : ");
             String fullName = scanner.nextLine();
-
-            System.out.print("Enter relationship: ");
+            System.out.print("Enter relationship    : ");
             String relationship = scanner.nextLine();
-
-            System.out.print("Enter contact info: ");
+            System.out.print("Enter contact info    : ");
             String contactInfo = scanner.nextLine();
-
-            System.out.print("Enter address: ");
+            System.out.print("Enter address         : ");
             String address = scanner.nextLine();
-
-            System.out.print("Enter email: ");
+            System.out.print("Enter email           : ");
             String email = scanner.nextLine();
 
             // Save the information to a file
             FileWriter fileWriter = new FileWriter("family_contacts.txt", true);
             PrintWriter printWriter = new PrintWriter(fileWriter);
 
-            printWriter.println("Full Name: " + fullName);
-            printWriter.println("Relationship: " + relationship);
-            printWriter.println("Contact Info: " + contactInfo);
-            printWriter.println("Address: " + address);
-            printWriter.println("Email: " + email);
+            // Write the formatted contact information
+            printWriter.println("Full Name   \t: " + fullName);
+            printWriter.println("Relationship    : " + relationship);
+            printWriter.println("Contact Info    : " + contactInfo);
+            printWriter.println("Address     \t: " + address);
+            printWriter.println("Email       \t: " + email);
             printWriter.println();
             printWriter.close();
 
-            System.out.println("Family contact information saved successfully!\n");
+            System.out.print("\nFamily contact information saved successfully!\n");
         }catch(IOException e){
             System.out.println("An error occurred while saving the family contact information.\n");
             e.printStackTrace();
         }
     }
 
+    // Print all contact information
     private static void printAllContactInformation(){
-        
         try{
             FileReader fileReader = new FileReader("family_contacts.txt");
             BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -112,7 +110,7 @@ public class Family_Contact_Organizer{
             String line;
             boolean isEmpty = true;
             StringBuilder contactInfo = new StringBuilder();
-
+            System.out.println();
             while((line = bufferedReader.readLine()) != null){
                 if (!line.isEmpty()) {
                     contactInfo.append(line).append("\n");
@@ -128,26 +126,26 @@ public class Family_Contact_Organizer{
             if(contactInfo.length() > 0) {
                 System.out.println(contactInfo.toString());
             }
-
             bufferedReader.close();
 
             if(isEmpty){
-                System.out.println("No family contact information available.\n");
+                System.out.println("No contact information available to print.\n");
             }
         }catch(FileNotFoundException e){
-            System.out.println("Family contact file not found.\n");
+            System.out.print("\nFamily contact file not found.\n");
         }catch(IOException e){
             System.out.println("An error occurred while reading the family contact information.\n");
             e.printStackTrace();
         }
     }
 
+    // Delete a contact
     private static void deleteContactInformation(){
         Scanner scanner = new Scanner(System.in);
         try{
             File inputFile = new File("family_contacts.txt");
             if(!inputFile.exists() || inputFile.length() == 0){
-                System.out.println("No contact information available to delete.\n");
+                System.out.print("No contact information available to delete.\n");
                 return;
             }
 
@@ -159,7 +157,7 @@ public class Family_Contact_Organizer{
             BufferedReader reader = new BufferedReader(new FileReader(inputFile));
             BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
 
-            String lineToRemove = "Full Name: " + fullNameToDelete;
+            String lineToRemove = "Full Name   \t: " + fullNameToDelete;
             String currentLine;
             boolean found = false;
 
@@ -180,9 +178,9 @@ public class Family_Contact_Organizer{
             tempFile.renameTo(inputFile);
 
             if(found){
-                System.out.println("Contact information deleted successfully!\n");
+                System.out.print("\nContact information deleted successfully!\n");
             }else{
-                System.out.println("No contact information found for the given name.\n");
+                System.out.print("\nNo contact information found for the given name.\n");
             }
         }catch(IOException e){
             System.out.println("An error occurred while deleting the contact information.\n");
@@ -190,18 +188,20 @@ public class Family_Contact_Organizer{
         }
     }
 
+    // Search for a contact by full name
     private static void searchContactInformation(){
         Scanner scanner = new Scanner(System.in);
         try {
             File inputFile = new File("family_contacts.txt");
 
             if (!inputFile.exists() || inputFile.length() == 0) {
-                System.out.println("No family contact information available to search.\n");
+                System.out.print("No family contact available to search.\n");
                 return;
             }
 
             System.out.print("Enter the full name of the contact you want to search: ");
             String fullNameToSearch = scanner.nextLine();
+            System.out.println();
 
             BufferedReader reader = new BufferedReader(new FileReader(inputFile));
 
@@ -209,8 +209,8 @@ public class Family_Contact_Organizer{
             boolean found = false;
 
             while((currentLine = reader.readLine()) != null){
-                if(currentLine.contains("Full Name:") && currentLine.contains(fullNameToSearch)){
-                    for(int i = 0; i < 4; i++){  
+                if(currentLine.contains("Full Name") && currentLine.contains(fullNameToSearch)){
+                    for(int i = 0; i < 5; i++){  
                         System.out.println(currentLine);
                         currentLine = reader.readLine();
                     }
@@ -218,11 +218,10 @@ public class Family_Contact_Organizer{
                     break;
                 }
             }
-
             reader.close();
 
             if(!found){
-                System.out.println("No family contact information found for the given name.\n");
+                System.out.print("No contact information found for the given name.\n");
             }
         }catch(IOException e){
             System.out.println("An error occurred while searching for family contact information.\n");
@@ -230,5 +229,3 @@ public class Family_Contact_Organizer{
         }
     }
 }
-
-
